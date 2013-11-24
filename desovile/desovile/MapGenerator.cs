@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace desovile {
     class MapGenerator {
 
-        int height, width, cutWalls;
+        int height, width;
 
 
         Texture2D trbl, rbl, tbl, trl, trb;

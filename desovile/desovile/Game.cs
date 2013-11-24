@@ -14,12 +14,24 @@ namespace desovile
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Game1 : Microsoft.Xna.Framework.Game
+    public class Game : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        MapGenerator map;
 
-        public Game1()
+
+        KeyboardState currentKeyboardState;
+        KeyboardState previousKeyboardState;
+
+        // A movement speed for the player
+        float playerMoveSpeed;
+
+        private Player player;
+
+        private Texture2D trbl, rbl, tbl, trl, trb, wall;
+
+        public Game()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -35,6 +47,16 @@ namespace desovile
         {
             // TODO: Add your initialization logic here
 
+            graphics.PreferredBackBufferHeight = 750;
+            graphics.PreferredBackBufferWidth = 750;
+            graphics.ApplyChanges();
+
+            map = new MapGenerator();
+            map.generateMap(15, 15, true, 1337, 20);
+
+
+            player = new Player();
+
             base.Initialize();
         }
 
@@ -47,6 +69,16 @@ namespace desovile
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            Texture2D trbl, rbl, tbl, trl, trb;
+            trbl = Content.Load<Texture2D>("Graphics/TRBL");
+            rbl = Content.Load<Texture2D>("Graphics/RBL");
+            tbl = Content.Load<Texture2D>("Graphics/TBL");
+            trl = Content.Load<Texture2D>("Graphics/TRL");
+            trb = Content.Load<Texture2D>("Graphics/TRB");
+            wall = Content.Load<Texture2D>("Graphics/wall");
+            map.initializeGraphics(trbl,rbl,tbl,trl,trb);
+
+            player.initialize(Content.Load<Texture2D>("Graphics/player"), new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X + GraphicsDevice.Viewport.TitleSafeArea.Width / 2, GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height / 2), map.getChunk(new Point(7, 7)));
             // TODO: use this.Content to load your game content here
         }
 
@@ -70,9 +102,33 @@ namespace desovile
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            // TODO: Add your update logic here
+
+            currentKeyboardState = Keyboard.GetState();
+            previousKeyboardState = currentKeyboardState;
+
+            updatePlayer(gameTime);
 
             base.Update(gameTime);
+        }
+
+
+        private void updatePlayer(GameTime gameTime) {
+
+            if (currentKeyboardState.IsKeyDown(Keys.Left)) {
+                player.movePlayer(Player.direction.left, 4);
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.Up)) {
+                player.movePlayer(Player.direction.up, 4);
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.Right)) {
+                player.movePlayer(Player.direction.right, 4);
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.Down)) {
+                player.movePlayer(Player.direction.down, 4);
+            }
         }
 
         /// <summary>
@@ -81,9 +137,21 @@ namespace desovile
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
+            map.getChunk(new Point(0, 0)).initializeGraphics(wall);
+            map.getChunk(new Point(0, 0)).initialize();
+
+            spriteBatch.Begin();
+
+
+            map.getChunk(new Point(0,0)).draw(spriteBatch, new Point(50,50));
+            //map.draw(spriteBatch);
+
+            player.draw(spriteBatch);
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }

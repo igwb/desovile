@@ -110,9 +110,10 @@
     <Compile Include="Chunk.cs" />
     <Compile Include="Field.cs" />
     <Compile Include="MapGenerator.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Game1.cs" />
+    <Compile Include="Game.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
