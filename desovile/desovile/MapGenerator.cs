@@ -10,7 +10,7 @@ namespace desovile {
         int height, width;
 
 
-        Texture2D trbl, rbl, tbl, trl, trb;
+        Texture2D trbl, rbl, tbl, trl, trb, wall;
 
         Chunk[,] chunks;
 
@@ -188,30 +188,26 @@ namespace desovile {
 
         public Chunk getChunk(Point pos) {
 
+            if (!chunks[pos.X, pos.Y].isInitilaized()) {
+                chunks[pos.X, pos.Y].initialize(wall);
+            }
+
             return chunks[pos.X, pos.Y];
         }
 
-        public void initializeGraphics(Texture2D trbl, Texture2D rbl, Texture2D tbl, Texture2D trl, Texture2D trb) {
+        public void initializeGraphics(Texture2D trbl, Texture2D rbl, Texture2D tbl, Texture2D trl, Texture2D trb, Texture2D wall) {
             
             this.trbl = trbl;
             this.rbl = rbl;
             this.tbl = tbl;
             this.trl = trl;
             this.trb = trb;
+            this.wall = wall;
         }
 
         public void draw(SpriteBatch spriteBatch) {
 
-            System.Diagnostics.Debug.WriteLine("----------");
-
             foreach (Chunk item in chunks) {
-                /*
-                spriteBatch.Draw(rbl, new Vector2(40 + item.getPosition().X * rbl.Bounds.Height, 40 + item.getPosition().Y * rbl.Bounds.Width), null, Color.White, (float)Math.PI * 0.0f / 180.0f, new Vector2(rbl.Bounds.Width / 2, rbl.Bounds.Height / 2), 1f, SpriteEffects.None, 0.0f);
-spriteBatch.Draw(tbl, new Vector2(40 + item.getPosition().X * tbl.Bounds.Height, 40 + item.getPosition().Y * tbl.Bounds.Width), null, Color.White, (float)Math.PI * 0.0f / 180.0f, new Vector2(tbl.Bounds.Width / 2, tbl.Bounds.Height / 2), 1f, SpriteEffects.None, 0.0f);
-                    spriteBatch.Draw(trl, new Vector2(40 + item.getPosition().X * trl.Bounds.Height, 40 + item.getPosition().Y * trl.Bounds.Width), null, Color.White, (float)Math.PI * 0.0f / 180.0f, new Vector2(trl.Bounds.Width / 2, trl.Bounds.Height / 2), 1f, SpriteEffects.None, 0.0f);
-                    spriteBatch.Draw(trb, new Vector2(40 + item.getPosition().X * trb.Bounds.Height, 40 + item.getPosition().Y * trb.Bounds.Width), null, Color.White, (float)Math.PI * 0.0f / 180.0f, new Vector2(trb.Bounds.Width / 2, trb.Bounds.Height / 2), 1f, SpriteEffects.None, 0.0f);
-                */
-                System.Diagnostics.Debug.WriteLine(item.getPosition() + " -- " + item.getOpenTop() + "; " + item.getOpenRight() + "; " + item.getOpenBottom() + "; " + item.getOpenLeft());
 
                 if (!item.getOpenTop()) {
 
@@ -235,7 +231,10 @@ spriteBatch.Draw(tbl, new Vector2(40 + item.getPosition().X * tbl.Bounds.Height,
                     spriteBatch.Draw(trb, new Vector2(40 + item.getPosition().X * trb.Bounds.Height, 40 + item.getPosition().Y * trb.Bounds.Width), null, Color.White, (float)Math.PI * 0.0f / 180.0f, new Vector2(trb.Bounds.Width / 2, trb.Bounds.Height / 2), 1f, SpriteEffects.None, 0.0f);
                     //spriteBatch.Draw(rbl, new Vector2(40 + item.getPosition().X * rbl.Bounds.Height, 40 + item.getPosition().Y * rbl.Bounds.Width), null, Color.White, (float)Math.PI * 270.0f / 180.0f, new Vector2(rbl.Bounds.Width / 2, rbl.Bounds.Height / 2), 1f, SpriteEffects.None, 0.0f);
                 }
-               
+
+                if (item.getOpenTop() && item.getOpenRight() && item.getOpenBottom() && item.getOpenLeft()) {
+                    spriteBatch.Draw(trbl, new Vector2(40 + item.getPosition().X * trbl.Bounds.Height, 40 + item.getPosition().Y * trbl.Bounds.Width), null, Color.White, (float)Math.PI * 0.0f / 180.0f, new Vector2(trbl.Bounds.Width / 2, trbl.Bounds.Height / 2), 1f, SpriteEffects.None, 0.0f);
+                }
             }
 
         }

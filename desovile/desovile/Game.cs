@@ -25,7 +25,11 @@ namespace desovile
         KeyboardState previousKeyboardState;
 
         // A movement speed for the player
-        float playerMoveSpeed;
+        int playerMoveSpeed = 4;
+
+        private static int MAP_SIZE = 15;
+
+        Point activeChunk;
 
         private Player player;
 
@@ -52,8 +56,9 @@ namespace desovile
             graphics.ApplyChanges();
 
             map = new MapGenerator();
-            map.generateMap(15, 15, true, 1337, 20);
+            map.generateMap(MAP_SIZE, MAP_SIZE, true, 1337, 20);
 
+            activeChunk = new Point(0, 0);
 
             player = new Player();
 
@@ -76,7 +81,7 @@ namespace desovile
             trl = Content.Load<Texture2D>("Graphics/TRL");
             trb = Content.Load<Texture2D>("Graphics/TRB");
             wall = Content.Load<Texture2D>("Graphics/wall");
-            map.initializeGraphics(trbl,rbl,tbl,trl,trb);
+            map.initializeGraphics(trbl,rbl,tbl,trl,trb, wall);
 
             player.initialize(Content.Load<Texture2D>("Graphics/player"), new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X + GraphicsDevice.Viewport.TitleSafeArea.Width / 2, GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height / 2), map.getChunk(new Point(7, 7)));
             // TODO: use this.Content to load your game content here
@@ -107,6 +112,7 @@ namespace desovile
             previousKeyboardState = currentKeyboardState;
 
             updatePlayer(gameTime);
+            updateActiveChunk(gameTime);
 
             base.Update(gameTime);
         }
@@ -115,20 +121,48 @@ namespace desovile
         private void updatePlayer(GameTime gameTime) {
 
             if (currentKeyboardState.IsKeyDown(Keys.Left)) {
-                player.movePlayer(Player.direction.left, 4);
+                player.movePlayer(Player.direction.left, playerMoveSpeed);
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.Up)) {
-                player.movePlayer(Player.direction.up, 4);
+                player.movePlayer(Player.direction.up, playerMoveSpeed);
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.Right)) {
-                player.movePlayer(Player.direction.right, 4);
+                player.movePlayer(Player.direction.right, playerMoveSpeed);
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.Down)) {
-                player.movePlayer(Player.direction.down, 4);
+                player.movePlayer(Player.direction.down, playerMoveSpeed);
             }
+        }
+
+        private void updateActiveChunk(GameTime gameTime) {
+
+            Chunk active = map.getChunk(activeChunk);
+            Rectangle chunkBounds = new Rectangle(GraphicsDevice.Viewport.TitleSafeArea.X + GraphicsDevice.Viewport.TitleSafeArea.Width / 2 - map.getChunk(activeChunk).getBounds().Width / 2, GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height / 2 - map.getChunk(activeChunk).getBounds().Height / 2, active.getBounds().Width, active.getBounds().Height);
+
+            if (player.getBounds().Center.X - 10 <= chunkBounds.X && activeChunk.X - 1 >= 0) {
+                activeChunk = new Point(activeChunk.X - 1, activeChunk.Y);
+                player.setPosition(new Vector2(chunkBounds.X + chunkBounds.Width - 50, player.getBounds().Y));
+            }
+
+            if (player.getBounds().Center.X + 10 >= chunkBounds.X + chunkBounds.Width && activeChunk.X + 1 <= MAP_SIZE - 1) {
+                activeChunk = new Point(activeChunk.X + 1, activeChunk.Y);
+                player.setPosition(new Vector2(chunkBounds.X + 50, player.getBounds().Y));
+            }
+
+            if (player.getBounds().Center.Y - 10 <= chunkBounds.Y  && activeChunk.Y - 1 >= 0) {
+                activeChunk = new Point(activeChunk.X, activeChunk.Y - 1);
+                player.setPosition(new Vector2(player.getBounds().X, chunkBounds.Y + chunkBounds.Height - 50));
+            }
+
+            if (player.getBounds().Center.Y + 10 >= chunkBounds.Y + chunkBounds.Height && activeChunk.Y + 1 <= MAP_SIZE - 1) {
+                activeChunk = new Point(activeChunk.X, activeChunk.Y + 1);
+                player.setPosition(new Vector2(player.getBounds().X, chunkBounds.Y + 50));
+            }
+
+            System.Diagnostics.Debug.WriteLine("Active: " + activeChunk);
         }
 
         /// <summary>
@@ -140,14 +174,12 @@ namespace desovile
             GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
-            map.getChunk(new Point(0, 0)).initializeGraphics(wall);
-            map.getChunk(new Point(0, 0)).initialize();
 
             spriteBatch.Begin();
 
-
-            map.getChunk(new Point(0,0)).draw(spriteBatch, new Point(50,50));
-            //map.draw(spriteBatch);
+            map.getChunk(activeChunk).setPos(new Point(GraphicsDevice.Viewport.TitleSafeArea.X + GraphicsDevice.Viewport.TitleSafeArea.Width / 2 - map.getChunk(activeChunk).getBounds().Width / 2 , GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height / 2 - map.getChunk(activeChunk).getBounds().Height / 2));
+            map.getChunk(activeChunk).draw(spriteBatch);
+            map.draw(spriteBatch);
 
             player.draw(spriteBatch);
 

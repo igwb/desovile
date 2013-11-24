@@ -10,6 +10,7 @@ namespace desovile {
 
         private Texture2D player;
         private Vector2 position;
+        private Rectangle bounds;
         private Chunk chunk;
 
         private bool active;
@@ -37,6 +38,11 @@ namespace desovile {
 
         }
 
+        public Rectangle getBounds() {
+
+            return bounds;
+        }
+
         public bool movePlayer(direction dir, int distance) {
 
             Vector2 newPos;
@@ -58,8 +64,14 @@ namespace desovile {
                     return false;
             }
 
+
+            bounds = new Rectangle((int)position.X, (int)position.Y, player.Width, player.Height);
             position = newPos;
             return true;
+        }
+
+        public void setPosition(Vector2 pos) {
+            position = pos;
         }
     }
 }

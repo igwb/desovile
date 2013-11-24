@@ -30,7 +30,7 @@ namespace desovile {
         public void draw(SpriteBatch spriteBatch, Point position) {
 
             if (!passable) {
-                spriteBatch.Draw(wall,new Rectangle(bounds.X + position.X, bounds.Y + position.Y, bounds.Width, bounds.Height),Color.Green);
+                spriteBatch.Draw(wall,new Rectangle(bounds.X + position.X, bounds.Y + position.Y, bounds.Width, bounds.Height),Color.White);
                 
             }
 
