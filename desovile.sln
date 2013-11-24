@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "desovileContent", "desovile
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Menus", "Menus\Menus.csproj", "{5C94797F-9C33-4E22-9976-4EE3C6E21E59}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Animation", "Animation2D\Animation.csproj", "{C099B12A-9D3D-4D19-9C52-0C167EB26025}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -23,6 +25,10 @@ Global
 		{5C94797F-9C33-4E22-9976-4EE3C6E21E59}.Debug|x86.Build.0 = Debug|x86
 		{5C94797F-9C33-4E22-9976-4EE3C6E21E59}.Release|x86.ActiveCfg = Release|x86
 		{5C94797F-9C33-4E22-9976-4EE3C6E21E59}.Release|x86.Build.0 = Release|x86
+		{C099B12A-9D3D-4D19-9C52-0C167EB26025}.Debug|x86.ActiveCfg = Debug|x86
+		{C099B12A-9D3D-4D19-9C52-0C167EB26025}.Debug|x86.Build.0 = Debug|x86
+		{C099B12A-9D3D-4D19-9C52-0C167EB26025}.Release|x86.ActiveCfg = Release|x86
+		{C099B12A-9D3D-4D19-9C52-0C167EB26025}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

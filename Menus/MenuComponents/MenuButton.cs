@@ -32,12 +32,11 @@ namespace Menus.MenuComponents
             set { buttonLabelFont = value; }
         }
 
-        private Vector2 buttonLabelPosition;
-
+        private Point buttonLabelPosition;
         public Point LabelPosition
         {
-            get { return new Point((int)buttonLabelPosition.X - Canvas.X, (int)buttonLabelPosition.Y - Canvas.Y); }
-            set { buttonLabelPosition.X = value.X + Canvas.X; buttonLabelPosition.Y = value.Y + Canvas.Y; }
+            get { return buttonLabelPosition; }
+            set { buttonLabelPosition = value; }
 
         }
 
@@ -58,7 +57,8 @@ namespace Menus.MenuComponents
 
             if (buttonLabelFont != null && buttonLabelText != null && buttonLabelColor != null)
             {
-                spriteBatch.DrawString(buttonLabelFont, buttonLabelText, buttonLabelPosition, buttonLabelColor);
+                Vector2 labelPos = new Vector2(buttonLabelPosition.X + canvas.X, buttonLabelPosition.Y + canvas.Y);
+                spriteBatch.DrawString(buttonLabelFont, buttonLabelText, labelPos, buttonLabelColor);
             }
         }
     }

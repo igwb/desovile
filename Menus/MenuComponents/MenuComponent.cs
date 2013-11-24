@@ -149,6 +149,7 @@ namespace Menus.MenuComponents
             if (canvas != null && texture != null && color != null)
             {
                 spriteBatch.Draw(texture, canvas, color);
+                
             }
         }
     }
