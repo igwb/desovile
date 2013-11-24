@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Menus.MenuComponents
 {
-    class MenuLabel : MenuComponent
+    public class MenuLabel : MenuComponent
     {
         private string labelText;
 
