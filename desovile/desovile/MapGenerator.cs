@@ -186,6 +186,10 @@ namespace desovile {
             return adjicent;
         }
 
+        public Chunk getChunk(Point pos) {
+
+            return chunks[pos.X, pos.Y];
+        }
 
         public void initializeGraphics(Texture2D trbl, Texture2D rbl, Texture2D tbl, Texture2D trl, Texture2D trb) {
             

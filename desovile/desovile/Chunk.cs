@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
-namespace desovile
-{
-    
-    class Chunk
-    {
-        Point pos;
+namespace desovile {
+
+    class Chunk {
+        private static int SIZE = 11, FIELD_SIZE = 45;
+
+        private Point pos;
+
+        private Texture2D wall;
 
         //Sides the chunk is open on
-        bool top, right, left, bottom;
+        private bool top, right, left, bottom;
+
+        private Field[,] fields;
 
         public Chunk(bool openTop, bool openRight, bool openLeft, bool openBottom, Point pos) {
 
@@ -68,6 +73,39 @@ namespace desovile
 
             return pos;
         }
-    
+
+        public void initializeGraphics(Texture2D wall) {
+
+            this.wall = wall;
+        }
+
+
+        public void initialize() {
+
+            bool passable;
+
+            fields = new Field[SIZE, SIZE];
+
+            for (int x = 0; x < SIZE; x++) {
+
+                for (int y = 0; y < SIZE; y++) {
+
+                    passable = !((!getOpenTop() && y == 0) | (!getOpenRight() && x == SIZE) | (!getOpenBottom() && y == SIZE) | (!getOpenLeft() && x == 0));
+                    
+                    fields[x, y] = new Field(this, new Rectangle(x * FIELD_SIZE, y * FIELD_SIZE, FIELD_SIZE, FIELD_SIZE), passable);
+                    fields[x, y].initializeGraphics(wall);
+                }
+            }
+
+        }
+
+        public void draw(SpriteBatch spriteBatch, Point position) {
+
+            foreach (Field item in fields) {
+
+                
+                item.draw(spriteBatch, position);
+            }
+        }
     }
 }
